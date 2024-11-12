@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        /* Add some basic styling */
+        #policies {
+            margin-top: 20px;
+        }
+        .policy-item {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        // Function to get a cookie by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Function to log the entire cookie string
+        function logCookies() {
+            console.log("All Cookies:", document.cookie);
+        }
+
+        // Function to fetch and display policies
+        function fetchPolicies() {
+            // Get companyId from the cookie
+            const companyId = getCookie('companyId');
+
+            if (companyId) {
+                console.log(`Company ID from cookie: ${companyId}`);
+
+                // Log the entire cookie string for debugging
+                logCookies();
+
+                // Make a request to /policies/{companyId}
+                fetch(`/policies/${companyId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Policies:', data);
+                        displayPolicies(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching policies:', error);
+                    });
+            } else {
+                console.error('Company ID cookie not found');
+            }
+        }
+
+        // Function to display policies on the page
+        function displayPolicies(policies) {
+            const policiesContainer = document.getElementById('policies');
+            if (policies.length > 0) {
+                policiesContainer.innerHTML = policies.map(policy =>
+                    `<div class="policy-item">
+                     <hr>
+                        <p> ConfigId : ${policy.id}</p>
+                        <p> Config Description :${policy.description}</p>
+                    </div>`
+                ).join('');
+            } else {
+                policiesContainer.innerHTML = '<p>No policies found.</p>';
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = function() {
+            fetchPolicies();
+        };
+    </script>
+</head>
+<body>
+<h1>HI, Internal IT Admin. Session will be active even after service restart</h1>
+<h1>Welcome to the Home Page</h1>
+<p>Your company policies will be loaded here...</p>
+<div id="policies"></div> <!-- Section for displaying policies -->
+</body>
+</html>
