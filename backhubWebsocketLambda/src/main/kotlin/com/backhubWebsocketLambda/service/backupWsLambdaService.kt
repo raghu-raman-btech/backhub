@@ -27,6 +27,13 @@ class BackupWsLambdaService {
 
 
     fun speakWithConnection(connId: String, data: String, domain: String) {
+
+        // To send messages to a connection , 
+        // https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/apigatewaymanagementapi/model/PostToConnectionRequest.html
+        // https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html
+        // https://docs.aws.amazon.com/code-library/latest/ug/apigatewaymanagementapi_example_apigatewaymanagementapi_PostToConnection_section.html
+        
+
         val region = System.getenv("region")
         val config: AwsClientBuilder.EndpointConfiguration = AwsClientBuilder.EndpointConfiguration(domain, region)
         client = AmazonApiGatewayManagementApiClientBuilder.standard()
